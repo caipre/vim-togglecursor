@@ -53,6 +53,10 @@ let s:xterm_blinking_block = "\<Esc>[0 q"
 let s:xterm_blinking_line = "\<Esc>[5 q"
 let s:xterm_blinking_underline = "\<Esc>[3 q"
 
+" Putty has limited support
+let s:putty_line = "\<Esc>[=1c"
+let s:putty_block = "\<Esc>[=2c"
+
 let s:in_tmux = exists("$TMUX")
 
 let s:supported_terminal = ''
@@ -88,6 +92,8 @@ if s:supported_terminal == ""
         " box under KDE.
 
         let s:supported_terminal = 'cursorshape'
+    elseif $PUTTY != ""
+        let s:supported_terminal = 'putty'
     endif
 endif
 
