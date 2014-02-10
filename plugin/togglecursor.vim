@@ -191,6 +191,14 @@ function! s:ToggleCursorByMode()
     endif
 endfunction
 
+function! s:ToggleCursorRefresh()
+    if mode() == 'n'
+        call writefile([s:GetEscapeCode(g:togglecursor_default)], '/dev/tty', 'b')
+    elseif mode() == 'i'
+        call writefile([s:GetEscapeCode(g:togglecursor_insert)], '/dev/tty', 'b')
+    endif
+endfunction
+
 " Setting t_ti allows us to get the cursor correct for normal mode when we first
 " enter Vim.  Having our escape come first seems to work better with tmux and
 " Konsole under Linux.  Allow users to turn this off, since some users of VTE
@@ -205,4 +213,6 @@ augroup ToggleCursorStartup
     autocmd VimEnter * call <SID>ToggleCursorInit()
     autocmd VimLeave * call <SID>ToggleCursorLeave()
     autocmd InsertEnter * call <SID>ToggleCursorByMode()
+    autocmd CursorMoved * call <SID>ToggleCursorRefresh()
+    autocmd CursorMovedI * call <SID>ToggleCursorRefresh()
 augroup END
